@@ -4,7 +4,6 @@ Aditya Singh  |  Amity Centre for Artificial Intelligence  |
 ## The Ego Gate
 Synthesizing Psychological Valuation for Continuous AGI Learning
 ## Aditya Singh
-Amity Centre for Artificial Intelligence
 
 ## Abstract
 Artificial General Intelligence (AGI) systems face two existential failure modes: model collapse from
