@@ -1,0 +1,7 @@
+numpy>=2.0
+scikit-learn>=1.5
+scipy>=1.13
+torch>=2.4
+reportlab>=5.0
+matplotlib>=3.11
+PyMuPDF>=1.28

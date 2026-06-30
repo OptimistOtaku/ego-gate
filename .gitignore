@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+
+# Local validation and timing runs; thesis evidence under results/digits is tracked.
+results/smoke/
+results/protocol_smoke/
+results/benchmark_cpu/
+results/benchmark_gpu/

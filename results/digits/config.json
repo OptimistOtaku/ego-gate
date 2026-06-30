@@ -1,0 +1,24 @@
+{
+  "num_seeds": 20,
+  "data_seed": 0,
+  "hidden_size": 64,
+  "epochs_a": 60,
+  "epochs_b": 40,
+  "learning_rate": 0.5,
+  "batch_size": 32,
+  "replay_batch_size": 2,
+  "buffer_size": 40,
+  "candidate_multiplier": 5,
+  "device": "cpu",
+  "conditions": [
+    "none",
+    "random",
+    "stratified_random",
+    "doubt",
+    "curiosity",
+    "egogate",
+    "embedding_kcenter",
+    "egogate_diverse",
+    "full"
+  ]
+}

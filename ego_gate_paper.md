@@ -23,7 +23,7 @@ position  it  within  the  continual  learning  and  intrinsic-motivation  liter
 small-scale proof-of-concept validation on a class-incremental benchmark, and identify
 open  research  directions  including  adaptive  coefficient  learning  and  application  to
 retrieval-augmented generation systems. On this benchmark, Ego-Gate-curated replay
-buffers  reduce  catastrophic  forgetting  by  roughly  a  third  relative  to  random  buffer
+buffers  reduce  catastrophic  forgetting  by  roughly  39%  relative  to  random  buffer
 selection  at  the  same  fixed  memory  budget  (p  <  0.001,  paired  across  20  seeds)  —
 though, as we discuss at length in Section 7, this result is preliminary and limited to a
 small, classification-style setting.
@@ -390,79 +390,46 @@ checkpoint is the shared starting point for every condition below. (2) Score eve
 training  example  using  the  frozen  checkpoint:  Doubt  via  Eq.  (1);  Curiosity  via  the
 practical approximation of Eq. (2′′) (F ≈ I, the simplest member of the family in Section
 2.3).  (3)  Combine  via  V  =  z-score(Doubt)  +  z-score(Curiosity),  i.e.  α=β=1,  the  naive
-unweighted baseline. (4) Build six replay buffers of at most K=40 examples (≈5.6% of the
-720  Task-A  training  examples):  None  (empty),  Random  (uniform  sample),  EgoGate
-(top-K  by  V),  DoubtOnly  (top-K  by  Doubt  alone),  CuriosityOnly  (top-K  by  Curiosity
-alone),  and  Full  (all  720  examples,  an  unbounded  oracle  upper  bound).  (5)  From  the
-same  checkpoint,  continue  training  for  40  epochs  on  Task-B  data  interleaved  with  the
-buffer (each condition starts from a fresh copy of the checkpoint). (6) Evaluate accuracy
+unweighted baseline. (4) Build replay buffers of at most K=40 examples (≈5.6% of the
+720 Task-A training examples): None (empty), Random (uniform sample), StratifiedRandom
+(class-balanced sample), EgoGate (top-K by V), DoubtOnly (top-K by Doubt alone),
+CuriosityOnly (top-K by Curiosity alone), EmbeddingKCenter (representation coverage),
+and EgoGateDiverse (k-center selection from the highest-V candidate pool). FullMemory
+retains all 720 examples but receives the same replay-compute allowance as every other
+non-empty condition. (5) From the same checkpoint, continue training for 40 epochs on
+Task B. Each 32-example Task-B batch is combined with two samples drawn from the
+condition's replay pool and optimized with one mean cross-entropy loss. This yields about
+40–46 replay exposures per epoch and keeps update count and replay compute fixed across
+selectors. (6) Evaluate accuracy
 on the held-out Task A test set (retention) and Task B test set (plasticity). (7) Repeat the
 full pipeline — fresh initialization, fresh random buffer draw — for 20 seeds; report mean
 ± standard deviation, with paired t-tests across seeds.
 
-## Aditya Singh
-## 8
 ## 5.2 Results
-## Condition
-## Task A
-acc.
-(pre-Task
-## B)
-Task A acc.
-(post-Task
-## B)
-## Forgetting
-## Task B
-acc.
-## None0.994
-## 0.004 ±
-## 0.012
-## 0.991 ±
-## 0.012
-## 0.998 ±
-## 0.003
-## Random0.994
-## 0.820 ±
-## 0.043
-## 0.174 ±
-## 0.043
-## 0.994 ±
-## 0.004
-EgoGate0.994
-## 0.877 ±
-## 0.033
-## 0.118 ±
-## 0.032
-## 0.992 ±
-## 0.007
-DoubtOnly0.994
-## 0.883 ±
-## 0.036
-## 0.111 ±
-## 0.035
-## 0.992 ±
-## 0.005
-CuriosityOnly0.994
-## 0.854 ±
-## 0.036
-## 0.140 ±
-## 0.035
-## 0.995 ±
-## 0.003
-## Full (oracle)0.994
-## 0.981 ±
-## 0.006
-## 0.013 ±
-## 0.006
-## 0.981 ±
-## 0.005
-Table  1.  Task  A  retention  and  Task  B  plasticity  after  continual  training,  by  buffer-selection
-condition (K=40, except None and Full). Mean ± std over 20 seeds.
-Significance.  Paired  t-tests  on  forgetting  across  the  same  20  seeds:  Random  vs.
-EgoGate,  t=4.22,  p=0.0005;  Random  vs.  DoubtOnly,  t=5.42,  p<0.0001;  Random  vs.
-CuriosityOnly,  t=3.17,  p=0.0051;  Random  vs.  Full,  t=15.11,  p<0.0001.  EgoGate  vs.
-DoubtOnly: t=0.74, p=0.47 (not significant).
-Without  replay,  the  network  exhibits  near-total  catastrophic  forgetting  (99.1  points  of
+| Condition | Task A pre | Task A post | Forgetting | Task B post |
+|---|---:|---:|---:|---:|
+| None | 0.994 | 0.000 ± 0.000 | 0.994 ± 0.000 | 0.998 ± 0.003 |
+| Random | 0.994 | 0.802 ± 0.032 | 0.193 ± 0.032 | 0.991 ± 0.008 |
+| StratifiedRandom | 0.994 | 0.827 ± 0.033 | 0.168 ± 0.033 | 0.990 ± 0.011 |
+| EgoGate | 0.994 | 0.878 ± 0.045 | 0.117 ± 0.045 | 0.990 ± 0.010 |
+| DoubtOnly | 0.994 | **0.892 ± 0.042** | **0.102 ± 0.042** | 0.985 ± 0.018 |
+| CuriosityOnly | 0.994 | 0.876 ± 0.043 | 0.118 ± 0.043 | 0.992 ± 0.007 |
+| EmbeddingKCenter | 0.994 | 0.841 ± 0.047 | 0.154 ± 0.047 | 0.989 ± 0.012 |
+| EgoGateDiverse | 0.994 | 0.864 ± 0.027 | 0.131 ± 0.027 | 0.986 ± 0.020 |
+| FullMemory | 0.994 | 0.935 ± 0.017 | 0.059 ± 0.017 | 0.977 ± 0.034 |
+
+Table 1. Task-A retention and Task-B plasticity after continual training. K=40 for all
+bounded buffers; FullMemory stores all Task-A examples but uses the same replay batch
+size. Mean ± sample standard deviation over 20 seeds.
+
+Significance. Paired tests on forgetting across the same 20 seeds show that EgoGate
+reduces forgetting by 0.076 absolute, or 39.4% relative to Random (t=6.64, p=2.35×10⁻⁶,
+Cohen's dz=1.49). DoubtOnly reduces forgetting by 46.8% relative to Random (t=8.00,
+p=1.67×10⁻⁷, dz=1.79), and CuriosityOnly reduces it by 38.7% (t=6.76,
+p=1.85×10⁻⁶, dz=1.51). Holm-corrected p-values are 1.41×10⁻⁵, 1.34×10⁻⁶, and
+1.30×10⁻⁵, respectively; all three comparisons remain significant.
+
+Without  replay,  the  network  exhibits  complete  catastrophic  forgetting  (99.4  points  of
 Task A accuracy lost), confirming the benchmark induces the failure mode the framework
 targets.  All  three  information-theoretic  selection  criteria  —  EgoGate,  DoubtOnly,  and
 CuriosityOnly — significantly reduce forgetting relative to random selection at the same
@@ -471,15 +438,16 @@ section:  informative  buffer  curation  outperforms  random  retention  under  
 memory budget.
 A  more  interesting,  and  humbler,  finding:  Doubt  alone  was  the  strongest  individual
 predictor   of   buffer   value   in   this   setting,   and   the   unweighted   Doubt+Curiosity
-combination (EgoGate) was statistically indistinguishable from Doubt alone (p=0.47) — it
-did  not  significantly  improve  on  Doubt,  and  numerically  trailed  it  slightly.  This  is  an
+combination (EgoGate) did not improve on Doubt alone and numerically trailed it by 1.4
+accuracy points. The direct paired comparison is marginal before multiplicity correction
+(t=2.11, uncorrected p=0.048; Holm-corrected p=0.144) and is not confirmatory. This is an
 informative negative result rather than a failure: it suggests the naive α=β=1 weighting
 is     not     optimal     here,     and     lends     direct     empirical     motivation     to     the
 adaptive-coefficient-learning  direction  in  Section  6.1,  rather  than  supporting  an  implicit
-assumption  that  equal  weighting  is  sufficient.  The  Full-replay  oracle  nearly  eliminates
-forgetting  (1.3%  residual),  confirming  the  upper  bound  and  indicating  that  the  gap
-between EgoGate and Full is attributable to the bounded buffer size K, not a flaw in the
-underlying task.
+assumption that equal weighting is sufficient. FullMemory obtains the strongest retention
+(5.9% forgetting), but its slightly lower and more variable Task-B accuracy also shows that
+retention alone is not a sufficient objective. The policy must explicitly optimize the
+stability–plasticity trade-off.
 
 ## Aditya Singh
 ## 9
