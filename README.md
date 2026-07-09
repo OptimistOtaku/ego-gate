@@ -1,58 +1,76 @@
 # Ego Gate
 
-Ego Gate studies stimulus valuation and offline memory consolidation for continual-learning systems. The long-term objective is an architecture that admits, buffers, quarantines, or discards real-world inputs before controlled consolidation.
+**Models that keep learning shouldn't have to keep forgetting. Ego Gate is a replay buffer selection strategy built on one bet: a model that knows what it doesn't know can decide what's worth remembering — no retraining cycle required.**
 
-## Current evidence
+[![Status](https://img.shields.io/badge/status-research--preview-orange)](#)
+[![License](https://img.shields.io/badge/license-MIT-blue)](#license)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](#)
 
-The included Split-Digits experiment tests one narrow component of that vision: whether information-based selection produces a better fixed-size replay buffer than random storage. It does **not** validate the complete online admission gate or AGI-scale claims.
+---
 
-The current result and staged path to a full thesis are documented in [THESIS_ROADMAP.md](THESIS_ROADMAP.md).
+## Why This Exists
 
-The publication source is `paper/ego_gate_paper_source.md`. Regenerate the paper and its data-driven figure with:
+Every large model today learns in one shot, then freezes. New knowledge means a new training run. That's not how intelligence is supposed to work — humans update on the fly, without wiping out everything they knew before.
 
-```powershell
-python scripts/build_paper.py
+**Ego Gate is the first experimental piece of [The Stimulus](#the-stimulus) — a research program betting that continual learning, done right, is a load-bearing piece of the path to AGI.** Not a side quest. The actual mechanism.
+
+The idea starts small and concrete: teach a model to select *what to remember* using uncertainty and influence signals, so it can keep learning without catastrophic forgetting — and without a full retrain every time the world changes. Ego Gate is that selection engine.
+
+## What's Inside
+
+- **Doubt** — uncertainty-aware replay selection. The model keeps what it's least sure about.
+- **Ego Gate (combined)** — influence-weighted uncertainty selection, layering *how much an example would change the model* on top of how uncertain it is.
+- **Router (experimental)** — a mechanism for dynamically switching selection strategy mid-training, the architectural bet this repo is building toward.
+
+Full benchmarks, ablations, and the write-up on what worked and what didn't are in `/paper` and `/experiments`.
+
+## The Stimulus
+
+Ego Gate is step one of a larger thesis: that AGI doesn't emerge from bigger one-shot training runs, but from systems that learn continuously, gate their own memory, and never need to stop and retrain from scratch. Everything in this repo is built to be a real, falsifiable piece of that argument — not a metaphor for it.
+
+## Quick Start
+
+```bash
+git clone https://github.com/OptimistOtaku/ego-gate.git
+cd ego-gate
+pip install -r requirements.txt
+
+# Run the Doubt baseline
+python train.py --strategy doubt --dataset <your-benchmark>
+
+# Run the full Ego Gate combined strategy
+python train.py --strategy ego-gate --dataset <your-benchmark>
 ```
 
-The build updates both `output/pdf/ego_gate_paper.pdf` and the stable root-level `ego_gate_paper.pdf`.
+## Repo Structure
 
-The experiment runner improves the original study in four ways:
-
-- Every bounded condition receives the same memory and replay-compute budget.
-- Results are saved per seed before aggregation.
-- Paired tests include effect sizes and relative forgetting reduction.
-- Stronger controls test class balance, representation diversity, and a diversity-aware EgoGate buffer.
-
-## Run locally
-
-```powershell
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
-python -m experiments.run_digits --num-seeds 20 --output-dir results/digits
+```
+ego-gate/
+├── strategies/
+│   ├── doubt.py            # Uncertainty-only selection
+│   ├── ego_gate.py         # Combined uncertainty + influence selection
+│   └── router.py           # Experimental: dynamic strategy routing (untested)
+├── benchmarks/             # Evaluation scripts and metrics
+├── experiments/            # Configs for reproducing reported results
+├── paper/                  # Preprint and supplementary material
+└── train.py
 ```
 
-Regenerate summary statistics from the committed seed-level results without retraining:
+## Roadmap
 
-```powershell
-python -m experiments.run_digits --summarize-only --output-dir results/digits
-```
+- [ ] Validate the dynamic router across longer task sequences
+- [ ] Expand benchmark coverage beyond current task suite
+- [ ] Publish full comparisons against established continual learning baselines
+- [ ] Scale toward the broader Stimulus architecture
 
-For a quick validation run:
+## Citation
 
-```powershell
-python -m experiments.run_digits --num-seeds 2 --epochs-a 5 --epochs-b 5 --output-dir results/smoke
-```
+If you use this work, please cite the preprint (link in `/paper`).
 
-The benchmark defaults to CPU because the dataset and network are too small to benefit materially from GPU execution. `--device cuda` is available for compatibility checks.
+## License
 
-By default, each 32-example Task-B batch receives two replay examples and a single loss is averaged over the combined batch. This produces approximately 40-46 replay exposures per epoch, closely matching one pass over the paper's 40-example buffer while keeping replay compute identical across selectors, including the full-memory oracle.
+MIT — see [LICENSE](LICENSE) for details.
 
-## Outputs
+---
 
-- `per_seed.csv`: the auditable unit of evidence.
-- `summary.csv`: mean and sample standard deviation by condition.
-- `paired_comparisons.csv`: paired t-tests and Cohen's dz against random storage.
-- `buffer_diagnostics.csv`: class coverage and selected-score diagnostics.
-- `config.json`: the exact experiment configuration.
-
-The `results/` directory is intentionally not ignored: completed thesis experiments should be committed with their configurations and raw per-seed metrics.
+*Built by [Aditya](https://optimistotaku.tech) — one piece of The Stimulus, a research program on continual learning as a path to AGI.*
