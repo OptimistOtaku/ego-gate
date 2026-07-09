@@ -65,7 +65,7 @@ ego-gate/
 
 ## Citation
 
-If you use this work, please cite the preprint (link in `/https://github.com/OptimistOtaku/ego-gate/blob/main/ego_gate_paper.pdf`).
+If you use this work, please cite the preprint ([available here](https://github.com/OptimistOtaku/ego-gate/blob/main/ego_gate_paper.pdf)).
 
 ## License
 
