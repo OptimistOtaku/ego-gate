@@ -1,0 +1,5 @@
+{
+  "experiments/run_digits.py": "1930fdb2956c4f27e4d72c9823dee052e4317c49bc21eb419fa495efc3a5d4fb",
+  "experiments/stream_gate.py": "b8bc15dd2ccfadbe53bc3f3cda57df628282579ae3d4fc1e2c2894a92f283df1",
+  "scripts/analyze_stream.py": "7d951fcaa3bc3b9debc37eef88e27f190d5e59c54b2ef7ac2b5c297adf81749b"
+}

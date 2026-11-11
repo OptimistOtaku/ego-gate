@@ -1,0 +1,74 @@
+{
+  "python": "3.13.18",
+  "torch": "2.11.0+cpu",
+  "numpy": "2.1.3",
+  "device": "cpu",
+  "gpu": null,
+  "source_sha256": "b8bc15dd2ccfadbe53bc3f3cda57df628282579ae3d4fc1e2c2894a92f283df1",
+  "arguments": {
+    "datasets": [
+      "digits",
+      "fashion"
+    ],
+    "seeds": 5,
+    "noise": [
+      0.0,
+      0.2
+    ],
+    "output": "/kaggle/working/ego_gate/stream_results",
+    "data_root": "/kaggle/working/data",
+    "device": "cpu"
+  },
+  "conditions": [
+    [
+      "reservoir",
+      "immediate",
+      false
+    ],
+    [
+      "balanced",
+      "immediate",
+      false
+    ],
+    [
+      "doubt",
+      "immediate",
+      false
+    ],
+    [
+      "curiosity",
+      "immediate",
+      false
+    ],
+    [
+      "egogate",
+      "immediate",
+      false
+    ],
+    [
+      "egogate_audit",
+      "immediate",
+      false
+    ],
+    [
+      "reservoir",
+      "periodic",
+      false
+    ],
+    [
+      "egogate_audit",
+      "periodic",
+      false
+    ],
+    [
+      "egogate_audit",
+      "immediate",
+      true
+    ],
+    [
+      "egogate_audit",
+      "periodic",
+      true
+    ]
+  ]
+}

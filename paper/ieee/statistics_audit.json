@@ -1,0 +1,14 @@
+{
+  "n": 20,
+  "mean_difference": 0.07596684098243714,
+  "relative_reduction": 0.39398279453748125,
+  "paired_t": 6.643555497978683,
+  "p": 2.352559141920987e-06,
+  "dz": 1.4855441705772803,
+  "ci95": [
+    0.05203380910484921,
+    0.09989987286002507
+  ],
+  "input_sha256": "a48cb080899a8e18e74c5d67ca3c9008b8f1f1c3f3d4d94211907f1872acca06",
+  "evidence": "Existing repository results; this analysis does not rerun training."
+}

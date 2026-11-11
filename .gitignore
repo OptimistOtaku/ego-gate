@@ -1,8 +1,26 @@
 __pycache__/
 *.py[cod]
+.venv-paper/
+tmp/tools/
+*.aux
+*.log
+*.out
+*.synctex.gz
+kaggle/kernel-metadata.json
+kaggle/gpu_benchmark/kernel-metadata.json
+results/kaggle_gpu/data/
+kaggle.json
+access_token
 
 # Local validation and timing runs; thesis evidence under results/digits is tracked.
 results/smoke/
 results/protocol_smoke/
 results/benchmark_cpu/
 results/benchmark_gpu/
+
+# Local rendering and live execution logs.
+tmp/ieee_render/
+tmp/kaggle-live.log
+
+results/kaggle_ieee/data/
+tmp/kaggle-live-unbuffered.log
