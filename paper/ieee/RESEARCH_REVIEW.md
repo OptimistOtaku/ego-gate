@@ -17,3 +17,7 @@ The 20-seed independent reproduction supports the original small offline replay 
 The manuscript is a complete IEEE-format empirical framework paper with a reproduced component result and a documented failed online extension. It is ready for author/colleague review, not a claim of acceptance or validation of the full vision. Stronger published baselines, validation-controlled hyperparameters, isolated scheduler ablations, and larger seed counts would strengthen a competitive submission. The commercial agent-memory application and developmental/personality hypothesis remain untested.
 
 The final evidence is in results/kaggle_ieee/ego_gate/. No experiment was changed after inspecting its outcomes. The next design should be evaluated in a separate, clearly labeled study, preserving these negative results.
+
+## Expanded GPU evidence and revised assessment
+
+The completed 870-run expansion is now integrated into the manuscript. Across 27 primary contrasts, EgoGate has no significant wins, five significant losses against random, and five against herding after Holm correction. No comparison with Doubt rejects; this does not establish equivalence. The paper is best framed as a reproducible empirical evaluation of selective replay and its limits, not a superior new continual-learning method. Severe old-task failure across bounded CIFAR methods limits claims about strong baselines. Stronger architectures, replay regimes, and complete published methods remain needed for broader claims.

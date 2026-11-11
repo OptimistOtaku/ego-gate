@@ -1,0 +1,62 @@
+\input{offline_table}
+\input{offline_contrasts}
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{offline_benchmark.pdf}
+\caption{Expanded offline benchmark across storage budgets. Lines show ten-seed means; shading shows one sample standard deviation, not a confidence interval. Primary significance tests use paired differences and Holm correction.}
+\label{fig:expanded}
+\end{figure*}
+
+\subsection{Completed GPU Results}
+All 870 runs completed on two Tesla T4 GPUs: 810 bounded-selector runs and
+60 anchors. The audit verifies the complete grid, unique observations, matched
+update/exposure counts, and selected-index hashes. Execution used Python
+3.13.16, PyTorch 2.11.0+cu130, torchvision 0.26.0+cu130, CUDA 13.0,
+NumPy 2.1.3, SciPy 1.16.3, and scikit-learn 1.6.1.
+
+The expanded study does not establish a general advantage for EgoGate.
+Across nine dataset/budget cells it has no significant wins over random,
+Doubt, or herding after correction across the 27 primary tests. It has five
+significant losses against random and five against herding: Digits at $K=20$,
+all three Fashion-MNIST budgets, and CIFAR-10 at $K=500$. No comparison with
+Doubt rejects after correction. Non-rejection is not evidence of equivalence.
+
+At the central budgets (Table~\ref{tab:offlineexpanded}), Digits final accuracy
+is 89.50\% for EgoGate and 89.47\% for random. Their paired difference is
+$+0.03$ points, with a 95\% interval of $[-3.43,3.50]$. This differs from the
+original fixed-split retention result. Randomized class partitions, data splits,
+separated random generators, and the final-accuracy endpoint all change the
+evaluation; the experiment does not isolate which change explains the discrepancy.
+
+On Fashion-MNIST at $K=200$, EgoGate reaches 52.41\%, versus 75.11\% for
+random and 76.94\% for herding. The EgoGate--random difference is $-22.70$
+points (95\% interval $[-25.76,-19.64]$, Holm $p=1.02\times10^{-6}$).
+Old-task accuracy is 15.92\% for EgoGate and 61.06\% for random, while
+new-task accuracy is 88.90\% and 89.17\%, respectively. Thus the deficit
+primarily concerns retention rather than a gain in new-task learning. EgoGate
+still covers an average 4.9 of five old classes; counting represented classes
+alone is insufficient to explain or prevent this failure.
+
+CIFAR-10 exposes a severe limitation of the entire low-replay regime. At
+$K=200$, random and EgoGate retain only 3.54\% and 1.73\% old-task accuracy,
+despite 80.19\% mean accuracy before Task B. New-task accuracies are 74.72\%
+and 74.45\%. Their final means, 39.13\% and 38.09\%, therefore conceal
+near-complete old-task failure. The full-pool anchor reaches 52.25\% final
+accuracy, which also falls short of strong continual learning. These results
+must not be presented as competitive CIFAR performance or a comprehensive
+comparison of modern continual-learning systems.
+
+\subsection{Cost and Interpretation}
+At CIFAR-10 $K=200$, mean EgoGate selection costs 10.48 s, versus less than
+0.001 s for random and 0.88 s for herding. Task-B training takes about 25.3 s
+for each. These synchronized timings exclude loading, base training, and final
+evaluation; they quantify this implementation on the recorded hardware, not
+universal latency. Equal update counts do not imply equal total compute.
+
+The memory curves (Fig.~\ref{fig:expanded}) and complete secondary results
+are supplied alongside all primary contrasts. A descriptive high mean for
+EgoGate-diverse on Digits is not a confirmed primary-comparison win. Increasing
+storage does not guarantee that global difficulty ranking becomes representative.
+The study strengthens the evidence about the limits of the original selector;
+it does not rescue its general-superiority claim. More replay, stronger
+architectures, tuned optimization, and complete published baselines remain
+necessary before drawing conclusions about broader continual-learning methods.

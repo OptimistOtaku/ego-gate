@@ -6,7 +6,7 @@ Research on selective replay, memory admission, and periodic consolidation.
 
 This is an author-review manuscript, not a peer-reviewed publication. The small offline Digits result reproduced on Kaggle, while the tested online extension failed to generalize its advantage. Both findings are retained.
 
-An additional **870-run GPU benchmark** on Digits, Fashion-MNIST, and CIFAR-10 has completed and passed its grid/exposure audit. Its results are included; integration into the PDF is still pending. These experiments do not establish state of the art or a route to AGI.
+An additional **870-run GPU benchmark** on Digits, Fashion-MNIST, and CIFAR-10 has completed and passed its grid/exposure audit. Its results are integrated into the current 10-page PDF, including the negative findings. These experiments do not establish state of the art or a route to AGI.
 
 ## Quick start
 
