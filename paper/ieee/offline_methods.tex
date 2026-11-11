@@ -1,0 +1,84 @@
+% Include only after the full GPU benchmark passes its completeness audit.
+\section{Expanded Offline Benchmark}
+\label{sec:expanded}
+\subsection{Question and Fixed Protocol}
+The preceding streaming failure changes both the learning regime and the
+selection algorithm. We therefore evaluate the original offline scoring rule
+on a broader, separately specified benchmark. This study asks whether global
+top-$K$ selection by the sum of standardized entropy and squared gradient norm
+improves final competence beyond random, entropy-only, and representative
+storage. It does not modify the gate using the new test outcomes.
+
+The locally recorded protocol and its source hashes precede the full run; it
+is not an externally registered preregistration. Ten paired seeds (100--109)
+randomize initialization, new-example order, random selection, and the partition
+of ten classes into two successive five-class tasks. Digits uses a stratified
+80/20 split per seed; Fashion-MNIST and CIFAR-10 use their full official training
+and test splits. CIFAR-10~\cite{cifar} contains natural color images, broadening the domains
+beyond grayscale digits and clothing. Its Kaggle-hosted mirror is validated
+against torchvision's official batch-file checksums. No leaderboard score is
+used as a comparator.
+
+All selectors within a seed share the Task-A checkpoint. They store examples
+from its complete training pool, then train on Task B with a fixed replay
+exposure. Task identity is never supplied at inference: the classifier always
+predicts among all ten classes. New-example shuffling and replay-position draws
+use separate random generators, unlike the coupled generator in the archived
+implementation. Thus even the no-replay anchor receives the same new-example
+order. These changes make the expansion a generalization study, not an exact
+reproduction of the original data split and training trajectory.
+
+Digits retains the original 64-hidden-unit MLP, SGD learning rate 0.5, 60/40
+Task-A/Task-B epochs, and batches containing 32 new and two replay examples.
+Its storage budgets are 20, 40, and 100. Fashion-MNIST uses a 128-hidden-unit
+MLP, learning rate 0.1, 10/10 epochs, and 128 new plus eight replay examples.
+Its budgets are 50, 200, and 500. CIFAR-10 uses three convolution--ReLU--pooling
+blocks with 32, 64, and 128 channels, followed by a 128-unit hidden layer and
+ten outputs. Each block uses a $3\times3$ convolution with unit padding and
+$2\times2$ max pooling. It uses SGD at 0.05 with momentum 0.9, 20/20 epochs, the same
+128:8 batch composition, and budgets 50, 200, and 500. Pixels are normalized
+by channel; there is no augmentation, batch normalization, pretrained backbone,
+learning-rate search, or test-based checkpoint selection. Accordingly, the
+CNN is a controlled learner rather than a competitive image-classification
+submission.
+
+\subsection{Selectors and Resource Accounting}
+Nine bounded selectors are evaluated: random, class-balanced random, Doubt,
+Curiosity, EgoGate, embedding k-center, the existing EgoGate-diverse rule,
+highest training loss, and a class-balanced herding adaptation. The latter
+greedily approximates each class's mean using normalized hidden features and
+unique exemplars. It adapts the exemplar-selection component associated with
+iCaRL~\cite{icarl}; it does not implement iCaRL's distillation or nearest-exemplar-mean
+classifier. No-replay and full-pool replay provide separately identified anchors,
+not equal-memory competitors. Full-pool replay uses the same replay count per
+update and is not assumed to be an accuracy upper bound.
+
+The MLP gradient norm is computed analytically. The CNN score sums the squared
+components of exact per-example parameter gradients, evaluated with vectorized
+automatic differentiation in batches of 16. Both use training labels and
+global pool standardization, preserving the original offline score rather than
+the streaming bounded transform. All selection uses the pre-Task-B model.
+
+The bounded methods have identical optimizer-update and training-exposure
+counts within each dataset/seed group. Selection and Task-B training times are
+measured separately with CUDA synchronization. Persistent exemplar bytes,
+selected-class counts, selected-index hashes, and peak CUDA allocations are
+recorded. Peak allocations include the resident datasets and models; they are
+not isolated incremental buffer cost. CPU selection scratch space is not
+included in CUDA allocations. The full candidate pool is available during
+selection, so this experiment does not claim bounded online working memory.
+Methods execute in randomized order within each seed. Independent seeds may
+run on separate GPUs; all paired methods within a seed use the same device.
+
+\subsection{Endpoints and Statistical Analysis}
+The primary endpoint is final mean accuracy, weighting the old and new task
+accuracies equally. This prevents apparent retention improvements from being
+interpreted without measuring new-task learning. The 27 specified primary
+contrasts compare EgoGate with random, Doubt, and herding in each of the nine
+dataset/budget cells. Two-sided paired $t$ tests use one Holm-corrected family.
+We report pointwise 95\% intervals for seed-paired differences; these intervals
+are not simultaneous confidence intervals. Forgetting, task-specific accuracy,
+other selector comparisons, coverage, and costs are secondary outcomes.
+The seeds vary several nuisance factors, not independent datasets. There is
+no significance-based stopping, winner-only reporting, or inference from the
+reduced execution-check run. Complete-grid and exposure audits precede analysis.

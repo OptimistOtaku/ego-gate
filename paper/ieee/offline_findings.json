@@ -1,0 +1,20 @@
+[
+  {
+    "comparator": "random",
+    "significant_wins": 0,
+    "significant_losses": 5,
+    "not_rejected": 4
+  },
+  {
+    "comparator": "doubt",
+    "significant_wins": 0,
+    "significant_losses": 0,
+    "not_rejected": 9
+  },
+  {
+    "comparator": "herding",
+    "significant_wins": 0,
+    "significant_losses": 5,
+    "not_rejected": 4
+  }
+]

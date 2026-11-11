@@ -1,0 +1,9 @@
+{
+  "complete": true,
+  "rows": 870,
+  "bounded_rows": 810,
+  "anchor_rows": 60,
+  "primary_tests": 27,
+  "source_sha256": "13e9b77ebcfe631cdc161ad48617a958859faf199ef99d0fbcd6ac14ae25b0c7",
+  "gpu_manifests": 6
+}

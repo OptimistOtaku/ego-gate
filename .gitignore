@@ -24,3 +24,8 @@ tmp/kaggle-live.log
 
 results/kaggle_ieee/data/
 tmp/kaggle-live-unbuffered.log
+
+tmp/
+results/local/
+results/kaggle_gpu_smoke/
+kaggle/gpu_benchmark/smoke_v1*

@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\small
+\caption{Expanded offline benchmark: final accuracy (\%) $\pm$ sample standard deviation over ten paired seeds. Central budgets are 40 for Digits and 200 for Fashion-MNIST and CIFAR-10. Anchors have different storage budgets.}
+\label{tab:offlineexpanded}
+\begin{tabular}{lrrr}\toprule
+Selector & Digits & Fashion-MNIST & CIFAR-10\\\midrule
+Random & 89.47 $\pm$ 1.96 & 75.11 $\pm$ 4.43 & 39.13 $\pm$ 0.83 \\
+Balanced random & 89.61 $\pm$ 2.31 & 76.32 $\pm$ 2.85 & 38.92 $\pm$ 1.19 \\
+Doubt & 89.61 $\pm$ 4.65 & 56.29 $\pm$ 7.22 & 35.25 $\pm$ 9.02 \\
+Curiosity & 89.16 $\pm$ 4.03 & 53.16 $\pm$ 3.52 & 38.36 $\pm$ 1.47 \\
+EgoGate & 89.50 $\pm$ 4.75 & 52.41 $\pm$ 3.51 & 38.09 $\pm$ 1.82 \\
+Embedding k-center & 88.94 $\pm$ 2.23 & 64.18 $\pm$ 4.53 & 38.50 $\pm$ 1.50 \\
+EgoGate-diverse & 91.78 $\pm$ 2.55 & 56.08 $\pm$ 3.85 & 38.21 $\pm$ 1.36 \\
+High loss & 89.97 $\pm$ 4.55 & 49.86 $\pm$ 2.40 & 38.45 $\pm$ 1.31 \\
+Herding adaptation & 90.62 $\pm$ 2.05 & 76.94 $\pm$ 3.05 & 39.35 $\pm$ 1.09 \\
+No replay & 49.53 $\pm$ 0.32 & 48.38 $\pm$ 3.48 & 35.32 $\pm$ 8.95 \\
+Full-pool replay & 95.91 $\pm$ 1.15 & 80.32 $\pm$ 2.24 & 52.25 $\pm$ 3.35 \\
+\bottomrule\end{tabular}
+\end{table*}

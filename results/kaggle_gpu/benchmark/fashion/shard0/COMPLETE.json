@@ -1,0 +1,28 @@
+{
+  "python": "3.13.16",
+  "torch": "2.11.0+cu130",
+  "torchvision": "0.26.0+cu130",
+  "numpy": "2.1.3",
+  "scipy": "1.16.3",
+  "sklearn": "1.6.1",
+  "cuda": "13.0",
+  "cudnn": 92700,
+  "device": "cuda:0",
+  "gpu": "Tesla T4",
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "cpu": "x86_64",
+  "threads": 2,
+  "gpu_memory_bytes": 15636037632,
+  "source_sha256": "13e9b77ebcfe631cdc161ad48617a958859faf199ef99d0fbcd6ac14ae25b0c7",
+  "cifar_mirror": "pankrzysiu/cifar10-python; torchvision official MD5 validation",
+  "seeds": [
+    100,
+    102,
+    104,
+    106,
+    108
+  ],
+  "dataset": "fashion",
+  "smoke": false,
+  "kaggle": true
+}
